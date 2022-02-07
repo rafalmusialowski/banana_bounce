@@ -32,9 +32,8 @@ def detect_fruits(img_path: str) -> Dict[str, int]:
         contours, _ = cv2.findContours(dilation, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         cv2.drawContours(copy, contours, -1, (0, 0, 255), 4)
         fruits = 0
-        needed_area=2000/0.15
         for contour in contours:
-            if cv2.contourArea(contour) > needed_area:
+            if cv2.contourArea(contour) > 2000:
                 fruits += 1
         return fruits
 
@@ -74,14 +73,14 @@ def detect_fruits(img_path: str) -> Dict[str, int]:
         res = cv2.bitwise_and(frame, frame, mask=mask)
         return res
 
-    # scale_percent =
-    # width = int(img.shape[1] * scale_percent / 100)
-    # height = int(img.shape[0] * scale_percent / 100)
-    # dst = (width, height)
-    # original_smaller = cv.resize(img, dst)
-    banana = detect_contours(recognize_banana(img))
-    orange = detect_contours(recognize_orange(img))
-    apple = detect_contours(recognize_apples(img))
+    scale_percent = 15
+    width = int(img.shape[1] * scale_percent / 100)
+    height = int(img.shape[0] * scale_percent / 100)
+    dst = (width, height)
+    original_smaller = cv2.resize(img, dst)
+    banana = detect_contours(recognize_banana(original_smaller))
+    orange = detect_contours(recognize_orange(original_smaller))
+    apple = detect_contours(recognize_apples(original_smaller))
     print([apple, banana, orange])
 
     return {'apple': apple, 'banana': banana, 'orange': orange}
